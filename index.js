@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const userRoute = require("./routes/user.js");
+const cookieParser = require("cookie-parser");
+const checkForAuthentication = require("./middlewares/user.js");
 
 const app = express();
 const PORT = 8000;
@@ -16,9 +18,13 @@ app.set("view engine", "ejs");
 //app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(checkForAuthentication("token"));
 
 app.get("/", (req, res) => {
-  res.render("home"); // This will render home.ejs
+  res.render("home", {
+    user: req.user,
+  });
 });
 
 app.use("/user", userRoute);

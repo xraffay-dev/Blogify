@@ -12,7 +12,7 @@ router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   try {
     const token = await User.matchPasswordAndGenerateToken(email, password);
-    console.log(`Token Generated: ${token}`);
+    // console.log(`Token Generated: ${token}`);
     res.cookie("token", token).redirect("/");
   } catch (error) {
     console.error("Login error:", error.message);
