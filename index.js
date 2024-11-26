@@ -8,12 +8,17 @@ const PORT = 8000;
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/blogify")
-  .then((e) => console.log("MongoDB Connected"));
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log("MongoDB connection error:", err));
+
+app.set("view engine", "ejs");
+
+//app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.render("home.ejs");
+  res.render("home"); // This will render home.ejs
 });
 
 app.use("/user", userRoute);

@@ -58,8 +58,8 @@ userSchema.static(
   async function (email, password) {
     const user = await this.findOne({ email });
     if (!user) {
-      console.log("No user with the email exists");
-      return null;
+      console.log("User not found");
+      throw new Error("Login Failed");
     }
     const hashedPassword = createHmac("sha256", user.salt)
       .update(password)
@@ -68,7 +68,7 @@ userSchema.static(
       return createTokenForUser(user);
     } else {
       console.log("Wrong Password");
-      return null;
+      throw new Error("Login Failed");
     }
   }
 );
