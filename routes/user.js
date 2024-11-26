@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const User = require("../models/user.js");
 //  const {User} = ....................
+
 const router = Router();
 
 router.get("/signin", (req, res) => {
@@ -8,11 +9,11 @@ router.get("/signin", (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   console.log(req.body);
-  const token = await User.matchPassword(email, password);
-  // console.log(token);
-  res.redirect("/");
+  const token = await User.matchPasswordAndGenerateToken(email, password);
+  console.log(`Token Generated:${token}`);
+  res.cookie("token", token).redirect("/");
 });
 
 router.get("/signup", (req, res) => {

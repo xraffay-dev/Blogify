@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 const { createHmac, randomBytes } = require("crypto");
 const { error } = require("console");
+const { createTokenForUser } = require("../utils/authentication");
 
 const userSchema = new Schema(
   {
@@ -52,22 +53,25 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-userSchema.static("matchPassword", async function (email, password) {
-  const user = await this.findOne({ email });
-  if (!user) {
-    console.log("No user with the email exists");
-    return null;
+userSchema.static(
+  "matchPasswordAndGenerateToken",
+  async function (email, password) {
+    const user = await this.findOne({ email });
+    if (!user) {
+      console.log("No user with the email exists");
+      return null;
+    }
+    const hashedPassword = createHmac("sha256", user.salt)
+      .update(password)
+      .digest("hex");
+    if (hashedPassword === user.password) {
+      return createTokenForUser(user);
+    } else {
+      console.log("Wrong Password");
+      return null;
+    }
   }
-  const hashedPassword = createHmac("sha256", user.salt)
-    .update(password)
-    .digest("hex");
-  if (hashedPassword === user.password) {
-    return user;
-  } else {
-    console.log("Wrong Password");
-    return null;
-  }
-});
+);
 
 const User = mongoose.model("user", userSchema);
 //https://mongoosejs.com/docs/models.html
