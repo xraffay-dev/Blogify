@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const userRoute = require("./routes/user.js");
+const blogRouter = require("./routes/blog.js");
 const cookieParser = require("cookie-parser");
 const checkForAuthentication = require("./middlewares/user.js");
 
@@ -27,7 +28,14 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/blog", (req, res) => {
+  res.render("blog", {
+    user: req.user,
+  });
+});
+
 app.use("/user", userRoute);
+app.use("/blog", blogRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started at PORT:${PORT}`);

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Blogify</a>
+    <a class="navbar-brand" href="/">Blogify</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,12 +15,13 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Add Blog</a>
-        </li>
+
         <% if (locals.user && locals.user.fullName) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog/add-new">Add Blog</a>
+        </li>
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
@@ -36,10 +37,10 @@
           </ul>
         </li>
         <% } else { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/user/signup">Create Account</a>
-          </li>
-        </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Create Account</a>
+        </li>
+      </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <a class="nav-link" href="/user/signin">Sign In</a>
