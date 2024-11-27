@@ -5,6 +5,7 @@ const userRoute = require("./routes/user.js");
 const blogRouter = require("./routes/blog.js");
 const cookieParser = require("cookie-parser");
 const checkForAuthentication = require("./middlewares/user.js");
+const Blog = require("./models/blog.js");
 
 const app = express();
 const PORT = 8000;
@@ -16,22 +17,21 @@ mongoose
 
 app.set("view engine", "ejs");
 
-//app.set("views", path.join(__dirname, "views"));
-
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthentication("token"));
+app.use(express.static(path.resolve("./public")));
 
-app.get("/", (req, res) => {
-  res.render("home", {
-    user: req.user,
-  });
-});
-
-app.get("/blog", (req, res) => {
-  res.render("blog", {
-    user: req.user,
-  });
+app.get("/", async (req, res) => {
+  try {
+    const allBlogs = await Blog.find({});
+    res.render("home", {
+      user: req.user,
+      blogs: allBlogs,
+    });
+  } catch (err) {
+    console.error("Error fetching blogs:", err);
+  }
 });
 
 app.use("/user", userRoute);
