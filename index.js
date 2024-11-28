@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const userRoute = require("./routes/user.js");
 const blogRouter = require("./routes/blog.js");
+
 const cookieParser = require("cookie-parser");
 const checkForAuthentication = require("./middlewares/user.js");
 const Blog = require("./models/blog.js");
